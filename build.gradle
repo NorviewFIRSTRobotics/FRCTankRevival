@@ -1,0 +1,44 @@
+plugins {
+    id "java"
+    id "eclipse"
+    id "idea"
+    id "jaci.openrio.gradle.GradleRIO" version "2017.1.0"
+}
+
+frc {
+    team = "1793"
+    robotClass = "org.frc1793.robot.Robot"
+}
+
+repositories {
+    mavenCentral()
+}
+dependencies {
+    //noinspection GroovyAssignabilityCheck
+    compile wpilib()
+    //noinspection GroovyAssignabilityCheck
+    compile talonSrx()
+    //Necessary for Strongback-Testing
+    testCompile group: 'junit', name: 'junit', version: '4.11'
+    testCompile group: 'org.easytesting', name: 'fest-assert', version: '1.4'
+    testCompile group: 'org.easytesting', name: 'fest-util', version: '1.1.6'
+    testCompile group: 'org.hamcrest', name: 'hamcrest-core', version: '1.3'
+    testCompile group: 'com.codahale.metrics', name: 'metrics-core', version: '+'
+//    //Adds Strongback and Strongback-Testing libraries
+    compile fileTree(dir: 'libs', include: '**/*.jar')
+}
+
+def robotManifest = {
+    attributes 'Main-Class': 'edu.wpi.first.wpilibj.RobotBase'
+    attributes 'Robot-Class': frc.robotClass
+}
+
+jar {
+    //noinspection GroovyAssignabilityCheck
+    from configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    manifest robotManifest
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '3.2.1'
+}

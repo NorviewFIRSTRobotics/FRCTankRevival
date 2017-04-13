@@ -16,18 +16,17 @@ public class Config {
 
     public static void update() {}
 
-    public static final Preferences p = Preferences.getInstance();
 
-    public static ConfigOption<Boolean> config(String key, Boolean defaultVal) {
-        return new ConfigOption<>(key, defaultVal, p::containsKey, p::putBoolean, p::getBoolean);
+    public static ConfigOption<Boolean> config(IConfigTable table, String key, Boolean defaultVal) {
+        return new ConfigOption<>(key, defaultVal, table::containsKey, table::putBoolean, table::getBoolean);
     }
 
-    public static ConfigOption<Double> config(String key, Double defaultVal) {
-        return new ConfigOption<>(key, defaultVal, p::containsKey, p::putDouble, p::getDouble);
+    public static ConfigOption<Double> config(IConfigTable table,String key, Double defaultVal) {
+        return new ConfigOption<>(key, defaultVal, table::containsKey, table::putDouble, table::getDouble);
     }
 
-    public static ConfigOption<String> config(String key, String defaultVal) {
-        return new ConfigOption<>(key, defaultVal, p::containsKey, p::putString, p::getString);
+    public static ConfigOption<String> config(IConfigTable table,String key, String defaultVal) {
+        return new ConfigOption<>(key, defaultVal, table::containsKey, table::putString, table::getString);
     }
 
 }

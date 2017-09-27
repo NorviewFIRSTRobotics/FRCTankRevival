@@ -1,7 +1,5 @@
 package org.frc1793.robot.config;
 
-import edu.wpi.first.wpilibj.Preferences;
-
 /**
  * Purpose:
  *
@@ -11,11 +9,6 @@ import edu.wpi.first.wpilibj.Preferences;
 @SuppressWarnings("unused")
 public class Config {
     public static ConfigOption<String> autonomous;
-
-    public static void init() {}
-
-    public static void update() {}
-
 
     public static ConfigOption<Boolean> config(IConfigTable table, String key, Boolean defaultVal) {
         return new ConfigOption<>(key, defaultVal, table::containsKey, table::putBoolean, table::getBoolean);

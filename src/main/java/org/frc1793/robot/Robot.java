@@ -5,12 +5,12 @@ import org.frc1793.robot.commands.TimedDriveCommand;
 import org.strongback.Strongback;
 import org.strongback.components.Motor;
 import org.strongback.components.ui.ContinuousRange;
-import org.strongback.components.ui.FlightStick;
+import org.strongback.components.ui.Gamepad;
 import org.strongback.drive.TankDrive;
 import org.strongback.hardware.Hardware;
 
 /**
- * Created by tyler on 4/11/17.
+ * Created by tyler on 4/11/17.`
  */
 public class Robot extends IterativeRobot {
     private Dashboard dashboard;
@@ -18,7 +18,7 @@ public class Robot extends IterativeRobot {
 
     public TankDrive drive;
     public ContinuousRange driveSpeed, turnSpeed;
-
+    public ContinuousRange throttle;
     @Override
     public void robotInit() {
         dashboard = new Dashboard();
@@ -29,9 +29,11 @@ public class Robot extends IterativeRobot {
     }
 
     private void initHumanInteractions() {
-        FlightStick driveStick = Hardware.HumanInterfaceDevices.microsoftSideWinder(0);
-        driveSpeed = driveStick.getPitch();
-        turnSpeed = driveStick.getYaw().invert();
+        Gamepad controller = Hardware.HumanInterfaceDevices.logitechDualAction(0);
+        throttle = controller.getRightY().map( x -> (x+1)/2d + 1d/2d);
+        driveSpeed = controller.getLeftX().scale( () -> throttle.read());
+        turnSpeed = controller.getLeftY().invert().scale( () -> throttle.read());
+
     }
     @Override
     public void robotPeriodic() {
@@ -43,7 +45,12 @@ public class Robot extends IterativeRobot {
     public void autonomousInit() {
         Strongback.submit(new TimedDriveCommand(drive,2,0.5,0,false));
     }
-    
+
+    @Override
+    public void teleopPeriodic() {
+        drive.arcade(driveSpeed.read(),turnSpeed.read());
+    }
+
     protected enum State {
         AUTO("Autonomous"), TELEOP("Teleop"), DISABLED("Disabled");
         private String value;
@@ -56,4 +63,5 @@ public class Robot extends IterativeRobot {
             return value;
         }
     }
+
 }

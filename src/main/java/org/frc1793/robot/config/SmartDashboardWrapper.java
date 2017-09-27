@@ -2,10 +2,14 @@ package org.frc1793.robot.config;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * Created by tyler on 4/12/17.
  */
 public class SmartDashboardWrapper implements IConfigTable {
+    private Set<String> keyCache = new HashSet<>();
     @Override
     public boolean containsKey(String key) {
         return SmartDashboard.containsKey(key);
@@ -18,11 +22,13 @@ public class SmartDashboardWrapper implements IConfigTable {
 
     @Override
     public void putString(String key, String value) {
+        keyCache.add(key);
         SmartDashboard.putString(key,value);
     }
 
     @Override
     public void putDouble(String key, Double value) {
+        keyCache.add(key);
         SmartDashboard.putNumber(key,value);
     }
 

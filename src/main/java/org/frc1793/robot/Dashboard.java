@@ -1,10 +1,9 @@
 package org.frc1793.robot;
 
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.frc1793.robot.config.Config;
 import org.frc1793.robot.config.ConfigOption;
 import org.frc1793.robot.config.SmartDashboardWrapper;
+import org.strongback.Strongback;
 import org.strongback.components.CurrentSensor;
 import org.strongback.components.VoltageSensor;
 import org.strongback.hardware.Hardware;
@@ -27,10 +26,10 @@ public class Dashboard {
     }
 
     public void update(Robot.State state) {
-        SmartDashboard.putNumber("voltage", voltageSensor.getVoltage());
-        SmartDashboard.putNumber("current", currentSensor.getCurrent());
-        SmartDashboard.putNumber("robotTime", DriverStation.getInstance().getMatchTime());
-        SmartDashboard.putString("robotPhase", state.getValue());
-        Config.update();
+        smartDashboard.putDouble("voltage", voltageSensor.getVoltage());
+        smartDashboard.putDouble("current", currentSensor.getCurrent());
+        smartDashboard.putDouble("robotTime", Strongback.timeSystem().currentTimeInMillis()/1000d);
+        smartDashboard.putString("robotPhase", state.getValue());
     }
+
 }
